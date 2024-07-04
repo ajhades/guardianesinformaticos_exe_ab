@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_04_211633) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_04_213543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_211633) do
     t.string "time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_availabilities_on_user_id"
   end
 
   create_table "clients", force: :cascade do |t|
@@ -35,6 +37,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_211633) do
     t.string "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "service_id"
+    t.index ["service_id"], name: "index_schedules_on_service_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -44,6 +48,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_211633) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_services_on_client_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -59,8 +65,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_211633) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_users_on_client_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "availabilities", "users"
+  add_foreign_key "schedules", "services"
+  add_foreign_key "services", "clients"
+  add_foreign_key "users", "clients"
 end
