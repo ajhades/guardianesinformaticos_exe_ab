@@ -23,13 +23,15 @@ client1 = Client.create(name: Faker::JapaneseMedia::CowboyBebop.character , nit:
     4.times do |i|
         user = User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, document: Faker::Number.number(digits: 10), role: 'Developer', status:'1', email: Faker::Internet.email, password: 'topsecret', password_confirmation: 'topsecret', client: client1)
         user.save!
+        date = rand(7.days).seconds.ago.beginning_of_hour
         6.times do |i|
             # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
-            user.availabilities.create(day_of_week: days[2], time: "0#{i}:00", week: 1, date: rand(7.days).seconds.ago )
+            user.availabilities.create(day_of_week: days[2], time: "0#{i}:00", week: 1, date: date + i.hours )
         end
+        date = rand(7.days).seconds.ago.beginning_of_hour
         5.times do |i|
             # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
-            user.availabilities.create(day_of_week: days[2], time: "1#{i}:00", week: 1, date: rand(7.days).seconds.ago )
+            user.availabilities.create(day_of_week: days[2], time: "1#{i}:00", week: 1, date:  date + i.hours)
         end
         UserService.create!(user: user, service: service)
     end
