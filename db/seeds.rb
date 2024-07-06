@@ -10,7 +10,7 @@
 require 'faker'
 days = ["L", "M", "MM", "J", "V", "S", "D"]
 def generate_random_time
-    hour = rand(0..23)
+    hour = rand(8..15)
     Time.new(2000, 1, 1, hour).strftime('%H:%M')
 end
 client1 = Client.create(name: Faker::JapaneseMedia::CowboyBebop.character , nit: Faker::Number.number(digits: 10), status: 1)
@@ -23,8 +23,13 @@ client1 = Client.create(name: Faker::JapaneseMedia::CowboyBebop.character , nit:
     4.times do |i|
         user = User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, document: Faker::Number.number(digits: 10), role: 'Developer', status:'1', email: Faker::Internet.email, password: 'topsecret', password_confirmation: 'topsecret', client: client1)
         user.save!
-        24.times do |i|
-            user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: rand(1..3), date: rand(21.days).seconds.ago )
+        6.times do |i|
+            # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
+            user.availabilities.create(day_of_week: days[2], time: "0#{i}:00", week: 1, date: rand(7.days).seconds.ago )
+        end
+        5.times do |i|
+            # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
+            user.availabilities.create(day_of_week: days[2], time: "1#{i}:00", week: 1, date: rand(7.days).seconds.ago )
         end
         UserService.create!(user: user, service: service)
     end

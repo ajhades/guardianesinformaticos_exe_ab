@@ -51,3 +51,5 @@ end
 gem "devise", "~> 4.9"
 
 gem 'faker'
+
+gem "byebug", "~> 11.1", :groups => [:development, :test]
