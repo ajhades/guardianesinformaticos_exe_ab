@@ -23,12 +23,12 @@ module DateUtils
     end
     
     def self.get_week_range(date)
-        raise ArgumentError, 'La fecha no esta en formato correcto' unless date > 0
+        raise ArgumentError, 'La fecha no esta en formato correcto' unless valid_date?(date)
         start_date = Date.parse(date).beginning_of_week
       
         end_date = start_date + 6.days
       
-        { start_date: start_date, end_date: end_date }
+        { start_date: I18n.l(start_date), end_date: I18n.l(end_date) }
     end
 
     def self.valid_date?(string)

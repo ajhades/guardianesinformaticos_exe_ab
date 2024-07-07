@@ -1,7 +1,7 @@
 es:
   date:
     formats:
-      default: "%d/%m/%Y"
+      default: "%Y-%m-%d"
       short: "%e de %B"
       long: "%e de %B de %Y"
       weekly: "Semana %V del %Y"
