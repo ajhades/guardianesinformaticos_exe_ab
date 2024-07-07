@@ -19,7 +19,6 @@ class User < ApplicationRecord
   end
 
   def free_hours(schedule, week, date)
-    byebug
     # Total de horas disponible
     total_daily_hours = daily_availability(schedule, week, date)
     # Horas ocupado

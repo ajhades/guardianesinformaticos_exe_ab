@@ -8,30 +8,26 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 require 'faker'
-days = ["L", "M", "MM", "J", "V", "S", "D"]
+days = ["L", "M", "MM", "J", "V"]
 def generate_random_time
-    hour = rand(8..15)
+    hour = rand(0..18)
     Time.new(2000, 1, 1, hour).strftime('%H:%M')
 end
 client1 = Client.create(name: Faker::JapaneseMedia::CowboyBebop.character , nit: Faker::Number.number(digits: 10), status: 1)
-5.times do |i|
+3.times do |i|
     service = client1.services.create(name: Faker::JapaneseMedia::CowboyBebop.episode, start_date: rand(10.years).seconds.ago, end_date: rand(10.years).seconds.from_now, status:1)
     
-    6.times do |n|
-        service.schedules.create(day_of_week: days[n], start_time: generate_random_time, end_time: generate_random_time)
+    5.times do |n|
+        service.schedules.create(day_of_week: days.sample, start_time: generate_random_time, end_time: generate_random_time)
     end
     4.times do |i|
         user = User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, document: Faker::Number.number(digits: 10), role: 'Developer', status:'1', email: Faker::Internet.email, password: 'topsecret', password_confirmation: 'topsecret', client: client1)
         user.save!
-        date = rand(7.days).seconds.ago.beginning_of_hour
-        6.times do |i|
+        date = rand(7.days).seconds.ago.beginning_of_day
+        day = days.sample
+        24.times do |i|
             # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
-            user.availabilities.create(day_of_week: days[2], time: "0#{i}:00", week: 1, date: date + i.hours )
-        end
-        date = rand(7.days).seconds.ago.beginning_of_hour
-        5.times do |i|
-            # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
-            user.availabilities.create(day_of_week: days[2], time: "1#{i}:00", week: 1, date:  date + i.hours)
+            user.availabilities.create(day_of_week: day, time: generate_random_time, week: 1, date: date )
         end
         UserService.create!(user: user, service: service)
     end
