@@ -15,4 +15,9 @@ class Service < ApplicationRecord
             "#{user.first_name} #{user.last_name}"
         end
     end
+
+    def available_days
+        days = self.schedules.pluck(:day_of_week).uniq
+        # days.map { |day| I18n.t("activerecord.attributes.schedule.day_of_week.#{day}") }
+    end
 end

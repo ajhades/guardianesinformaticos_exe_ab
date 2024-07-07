@@ -27,7 +27,7 @@ client1 = Client.create(name: Faker::JapaneseMedia::CowboyBebop.character , nit:
         day = days.sample
         24.times do |i|
             # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
-            user.availabilities.create(day_of_week: day, time: generate_random_time, week: 1, date: date )
+            user.availabilities.create(day_of_week: day, time: generate_random_time, week: date.strftime("%U").to_i, date: date )
         end
         UserService.create!(user: user, service: service)
     end

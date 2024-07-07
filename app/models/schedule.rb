@@ -52,10 +52,10 @@ class Schedule < ApplicationRecord
         free_hours_schedule = free_hours(week, date)
         return nil if free_hours_schedule.blank?
 
-        temp_daily_shift = []
         users = self.service.users
         return nil if users.blank?
-
+        
+        temp_daily_shift = []
         users.each do |usr| 
             # Obtiene disponibilidad para cada usuario
             free_hours = usr.free_hours(self, week, date)
