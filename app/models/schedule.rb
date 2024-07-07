@@ -2,7 +2,15 @@ class Schedule < ApplicationRecord
     has_many :daily_shifts
     belongs_to :service
     validate :start_time_before_end_time
-
+    enum day_of_week: {
+        "L" => 1,
+        "M" => 2,
+        "X" => 3,
+        "J" => 4,
+        "V" => 5,
+        "S" => 6,
+        "D" => 7
+    }    
     def available_hours
         TimeRangeFormatter.convert_to_hour_array(self.start_time, self.end_time)
     end

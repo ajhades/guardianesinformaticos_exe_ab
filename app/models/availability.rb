@@ -1,6 +1,15 @@
 class Availability < ApplicationRecord
     belongs_to :user
     validate :unique_availability
+    enum day_of_week: {
+        "L" => 1,
+        "M" => 2,
+        "X" => 3,
+        "J" => 4,
+        "V" => 5,
+        "S" => 6,
+        "D" => 7
+    }
 
     private
 

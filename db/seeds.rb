@@ -8,7 +8,7 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 require 'faker'
-days = ["L", "M", "MM", "J", "V"]
+days = ["L", "M", "X", "J", "V"]
 def generate_random_time
     hour = rand(0..18)
     Time.new(2000, 1, 1, hour).strftime('%H:%M')

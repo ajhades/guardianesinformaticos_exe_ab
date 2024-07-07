@@ -58,3 +58,23 @@ es:
       minute: "Minuto"
       second: "Segundo"
       week: "Semana"
+  activerecord:
+    attributes:
+      schedule:
+        day_of_week:
+          L: "Lunes"
+          M: "Martes"
+          X: "Miércoles"
+          J: "Jueves"
+          V: "Viernes"
+          S: "Sábado"
+          D: "Domingo"
+      availability:
+        day_of_week:
+          L: "Lunes"
+          M: "Martes"
+          X: "Miércoles"
+          J: "Jueves"
+          V: "Viernes"
+          S: "Sábado"
+          D: "Domingo"

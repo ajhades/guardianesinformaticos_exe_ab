@@ -9,4 +9,10 @@ class Service < ApplicationRecord
             schedule.assign_user_by_day(week, date)
         end
     end
+
+    def assigned_user
+        self.users.map do |user|
+            "#{user.first_name} #{user.last_name}"
+        end
+    end
 end
