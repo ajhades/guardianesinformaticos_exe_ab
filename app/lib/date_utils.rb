@@ -4,8 +4,8 @@ module DateUtils
     end
 
     def self.get_week_days(week, year, default=true)
-        raise ArgumentError, 'Número de semana debe estar entre 1 y 53' unless (1..53).include?(week)
-        raise ArgumentError, 'El año debe ser un número positivo' unless year > 0
+        raise ArgumentError, 'Week number must be between 1 and 53' unless (1..53).include?(week)
+        raise ArgumentError, 'The year must be a positive number' unless year > 0
         start_date = Date.commercial(year.to_i, week.to_i).beginning_of_week 
         week_days = []
       
@@ -18,13 +18,13 @@ module DateUtils
     end
 
     def self.week_formatted(week, year)
-        raise ArgumentError, 'Número de semana debe estar entre 1 y 53' unless (1..53).include?(week)
-        raise ArgumentError, 'El año debe ser un número positivo' unless year > 0
+        raise ArgumentError, 'Week number must be between 1 and 53' unless (1..53).include?(week)
+        raise ArgumentError, 'The year must be a positive number' unless year > 0
         I18n.l(Date.commercial(year.to_i, week.to_i), format: :weekly)
     end
     
     def self.get_week_range(date)
-        raise ArgumentError, 'La fecha no esta en formato correcto' unless valid_date?(date)
+        raise ArgumentError, 'Date: Incorrect format' unless valid_date?(date)
         start_date = Date.parse(date).beginning_of_week
       
         end_date = start_date + 6.days

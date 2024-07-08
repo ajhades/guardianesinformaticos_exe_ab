@@ -60,7 +60,7 @@ class User < ApplicationRecord
   end
 
   def used_hours_by_week(service, week, date)
-    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
+    raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
     date = Date.parse(date)
     total_hours = []
     daily_shifts = DailyShift.where(week: week, user: self, schedule: service.schedules.pluck(:id))
