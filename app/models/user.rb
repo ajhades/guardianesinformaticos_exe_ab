@@ -18,6 +18,15 @@ class User < ApplicationRecord
                       .where("time >= ? and time <= ?", schedule.start_time, schedule.end_time)
                       .pluck(:time).uniq   
   end
+  
+  def weekly_availability(week, date)
+    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
+    date = Date.parse(date)
+    availabilities_hours = Availability.where(user:self, week: week)
+                                        .where('extract(year  from date) = ?', date.year)
+                                        .pluck(:time)
+    availabilities_hours.sort!
+  end
 
   def free_hours(schedule, week, date)
     # Total de horas disponible
@@ -61,13 +70,5 @@ class User < ApplicationRecord
     total_hours.flatten.sort!
   end
 
-  def free_hours_by_week(week, date)
-    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
-    date = Date.parse(date)
-    availabilities_hours = Availability.where(user:self, week: week)
-                                        .where('extract(year  from date) = ?', date.year)
-                                        .pluck(:time)
-    availabilities_hours.sort!
-  end
 
 end
