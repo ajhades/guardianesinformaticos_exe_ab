@@ -40,7 +40,7 @@ class DailyShiftsController < ApplicationController
     render json: { error: "DailyShift not found" }, status: :not_found
   end
   def daily_shift_params
-    :params.require(:daily_shift).permit(:week, :date, :start_time, :end_time, :last_modification, :user_id, :schedule_id,)
+    params.require(:daily_shift).permit(:week, :date, :start_time, :end_time, :last_modification, :user_id, :schedule_id)
   end
 
   def json_response(object, status = :ok)

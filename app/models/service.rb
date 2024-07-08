@@ -3,6 +3,10 @@ class Service < ApplicationRecord
     has_many :users, through: :user_services
     has_many :schedules
     belongs_to :client
+    validates :name, presence: true
+    validates :start_date, presence: true
+    validates :end_date, presence: true
+    validates :client_id, presence: true
 
     def assign_weekly_schedule(week, year)
         self.schedules.map do |schedule|

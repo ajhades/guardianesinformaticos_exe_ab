@@ -1,6 +1,10 @@
 class Schedule < ApplicationRecord
     has_many :daily_shifts
     belongs_to :service
+    validates :day_of_week, presence: true
+    validates :start_time, presence: true
+    validates :end_time, presence: true
+    validates :service_id, presence: true
     validate :start_time_before_end_time
     enum day_of_week: {
         "L" => 1,
@@ -79,8 +83,12 @@ class Schedule < ApplicationRecord
     private
 
     def start_time_before_end_time
-        if start_time >= end_time
-        errors.add(:start_time, "must be before end time")
+        if start_time.blank? 
+            errors.add(:start_time, "should not be null")
+        elsif end_time.blank?
+            errors.add(:end_time, "should not be null")
+        elsif start_time >= end_time
+            errors.add(:start_time, "must be before end time")
         end
     end
 end

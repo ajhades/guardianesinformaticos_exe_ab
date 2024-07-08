@@ -1,5 +1,10 @@
 class Availability < ApplicationRecord
     belongs_to :user
+    validates :day_of_week, presence: true
+    validates :week, presence: true
+    validates :date, presence: true
+    validates :time, presence: true
+    validates :user_id, presence: true
     validate :unique_availability
     enum day_of_week: {
         "L" => 1,
