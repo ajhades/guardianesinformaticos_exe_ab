@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::JTIMatcher
   has_many :user_services
   has_many :services, through: :user_services
   has_many :availabilities
@@ -10,7 +11,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
 
   # scope :availabilities_hours, ->(day_of_week, week) { where("LENGTH(title) > ?", length) }
 
