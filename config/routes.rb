@@ -9,4 +9,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resources :clients
+  resources :daily_shifts
+  resources :services
+  resources :availabilities
+  resources :schedules
+  
 end

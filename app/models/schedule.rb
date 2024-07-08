@@ -17,8 +17,8 @@ class Schedule < ApplicationRecord
 
     def free_hours(week, date)
         total_hours = self.available_hours
-        daily_shitfs = DailyShift.where(schedule: self, date: date)
-        daily_shitfs.map do |daily|
+        daily_shifts = DailyShift.where(schedule: self, date: date)
+        daily_shifts.map do |daily|
             total_hours = total_hours - daily.used_hours
         end
         total_hours
