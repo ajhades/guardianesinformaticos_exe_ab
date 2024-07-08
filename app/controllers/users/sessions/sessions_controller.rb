@@ -32,10 +32,8 @@ class Users::Sessions::SessionsController < Devise::SessionsController
     headers['Authorization'] = @token
 
     render json: {
-      status: {
         code: 200, message: 'Logged in successfully.',
         token: @token,
-      }
     }, status: :ok
   end
 
