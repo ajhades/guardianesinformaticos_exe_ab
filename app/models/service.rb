@@ -4,15 +4,15 @@ class Service < ApplicationRecord
     has_many :schedules
     belongs_to :client
 
-    def assign_weekly_schedule(week, date)
+    def assign_weekly_schedule(week, year)
         self.schedules.map do |schedule|
-            schedule.assign_user_by_day(week, date)
+            schedule.assign_users_by_day(week, year)
         end
     end
 
     def assigned_user
         self.users.map do |user|
-            "#{user.first_name} #{user.last_name}"
+            user.full_name
         end
     end
 

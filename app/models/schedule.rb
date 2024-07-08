@@ -17,7 +17,7 @@ class Schedule < ApplicationRecord
 
     def free_hours(week, date)
         total_hours = self.available_hours
-        daily_shitfs = DailyShift.where(schedule: self, week: week, date: date)
+        daily_shitfs = DailyShift.where(schedule: self, date: date)
         daily_shitfs.map do |daily|
             total_hours = total_hours - daily.used_hours
         end
@@ -25,11 +25,11 @@ class Schedule < ApplicationRecord
     end
 
     def define_day(week, date)
-        temp_daily_shift = free_users_for_day(week, date)
-        return nil if temp_daily_shift.blank?
+        free_users_hours = free_users_hours_for_day(week, date)
+        return nil if free_users_hours.blank?
 
         # Encuentra el objeto con el arreglo más grande
-        best_range = temp_daily_shift.max_by { |obj| obj.values.flatten.size }
+        best_range = free_users_hours.max_by { |obj| obj.values.flatten.size }
         best_range.each do |key, values|
             values.sort!
         end
@@ -47,7 +47,7 @@ class Schedule < ApplicationRecord
         end
     end
 
-    def free_users_for_day(week, date)
+    def free_users_hours_for_day(week, date)
         # Valida que hayan horas aun disponibles para esta tarea
         free_hours_schedule = free_hours(week, date)
         return nil if free_hours_schedule.blank?
@@ -58,23 +58,23 @@ class Schedule < ApplicationRecord
         temp_daily_shift = []
         users.each do |usr| 
             # Obtiene disponibilidad para cada usuario
-            free_hours = usr.free_hours(self, week, date)
-            next if free_hours.blank?
+            free_hours_usr = usr.free_hours(self, week, date)
+            next if free_hours_usr.blank?
 
-            free_hours = free_hours.intersection(free_hours_schedule)
-            availabilities_hours = TimeRangeFormatter.order_hours(free_hours)
+            free_hours_usr = free_hours_usr.intersection(free_hours_schedule)
+            availabilities_hours = TimeRangeFormatter.order_hours(free_hours_usr)
             temp_daily_shift << {usr.id => availabilities_hours}
         end
         temp_daily_shift
     end
 
-    def assign_user_by_day(week, date)
-        while true do
-            break 'fully' if free_hours(week, date).blank?
-
-            break 'assigned' if define_day(week, date).blank?
+    def assign_users_by_day(week, year)
+        day_of_week = DateUtils.get_week_days(week, year)
+        day_of_week.map do |day|
+            next if free_hours(week, day).blank?
+            define_day(week, day) until define_day(week, day).blank?
         end
-    end
+      end
 
     private
 

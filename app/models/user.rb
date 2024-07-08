@@ -11,6 +11,9 @@ class User < ApplicationRecord
 
   # scope :availabilities_hours, ->(day_of_week, week) { where("LENGTH(title) > ?", length) }
 
+  def full_name
+    "#{try(:first_name)} #{try(:last_name)}".to_s
+  end
   def daily_availability(schedule, week, date)
     raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
     date = Date.parse(date)
@@ -40,7 +43,7 @@ class User < ApplicationRecord
       total_daily_hours = total_daily_hours - range_hour_daily
     end
     # Total de horas libres
-    total_daily_hours
+    total_daily_hours.sort!
   end
 
   def used_hours(schedule, week, date)
