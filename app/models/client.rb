@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Client < ApplicationRecord
-    has_many :users
-    has_many :services
-    validates :name, presence: true
-    validates :nit, presence: true
+  has_many :users
+  has_many :services
+  validates :name, presence: true
+  validates :nit, presence: true
 end
