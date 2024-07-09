@@ -84,7 +84,7 @@ class Service < ApplicationRecord
           id: user.id
         },
         hours: total_hours,
-        total_hours: total_hours.count
+        total: total_hours.count
       }
     end
   end

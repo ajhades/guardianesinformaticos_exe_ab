@@ -97,7 +97,7 @@ class ServicesController < ApplicationController
     begin
       week_range = DateUtils.get_days_of_week_range(date)
       week = DateUtils.week_formatted(date)
-      output = { week: week, dates: week_range }
+      output = { week: week, date: week_range }
       json_response(output)
     rescue ArgumentError => e
       json_response_error("Error: #{e.message}")
