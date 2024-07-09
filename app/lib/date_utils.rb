@@ -41,7 +41,7 @@ module DateUtils
     # Dia inicial y final de la semana en formato "%d/%m/%Y"
     # @param date [String] - formato "%Y-%m-%d"
     # @return [Object] - { start_date, end_date }
-    def self.get_week_range(date)
+    def self.get_days_of_week_range(date)
         raise ArgumentError, 'Date: Incorrect format' unless valid_date?(date)
         start_date = Date.parse(date).beginning_of_week
       

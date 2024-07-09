@@ -1,5 +1,5 @@
 class ServicesController < ApplicationController
-  before_action :set_service, only: [:show, :update, :destroy, :total_used_hours_per_user, :availabilities_hours, :available_hours_per_user, :used_hours_per_user]
+  before_action :set_service, only: [:show, :update, :destroy, :total_used_hours_per_user, :availabilities_hours, :available_hours_per_user, :used_hours_per_user, :available_weeks]
   def index
     @services = Service.all
     json_response(@services)
@@ -84,12 +84,18 @@ class ServicesController < ApplicationController
     json_response(output)
   end
 
+  # Semanas disponibles para la tarea
+  def available_weeks
+    output = @service.available_weeks
+    json_response(output)
+  end
+
   # Fechas para la semana seleccionada
   def week_selected
     date = params[:date]
 
     begin
-      week_range = DateUtils.get_week_range(date)
+      week_range = DateUtils.get_days_of_week_range(date)
       week = DateUtils.week_formatted(date)
       output = { week: week, dates: week_range }
       json_response(output)

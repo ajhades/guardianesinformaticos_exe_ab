@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   get "/services/week_selected", to: "services#week_selected"
+  get "/services/available_weeks/:id", to: "services#available_weeks"
   get "/services/total_used_hours_per_user/:id", to: "services#total_used_hours_per_user"
   get "/services/used_hours_per_user/:id", to: "services#used_hours_per_user"
   get "/services/available_hours_per_user/:id", to: "services#available_hours_per_user"

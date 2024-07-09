@@ -79,4 +79,20 @@ class Service < ApplicationRecord
     schedules.pluck(:day_of_week).uniq
     # days.map { |day| I18n.t("activerecord.attributes.schedule.day_of_week.#{day}") }
   end
+
+  def available_weeks
+    first_week = users.includes(:availabilities).minimum(:date) || Date.today
+    last_week = users.includes(:availabilities).maximum(:date) || Date.today
+    first_week_date = first_week.beginning_of_week
+    last_week_date = (last_week + 5.weeks).beginning_of_week
+    weeks = []
+
+    current_date = first_week_date
+    while current_date <= last_week_date
+      weeks << { date: I18n.l(current_date), week: current_date.cweek, label: I18n.l(current_date, format: :weekly)}
+      current_date += 1.week
+    end
+
+    weeks
+  end
 end
