@@ -1,5 +1,3 @@
-
-
 class Service < ApplicationRecord
   has_many :user_services
   has_many :users, through: :user_services
@@ -25,14 +23,12 @@ class Service < ApplicationRecord
       {
         day: schedule.day_of_week_number,
         hours: schedule.available_hours
-      }  
+      }
     end
   end
 
   def available_hours_per_user(week, date)
-    unless DateUtils.valid_date?(date)
-      raise ArgumentError, 'La fecha no esta en formato correcto'
-    end
+    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
 
     date = Date.parse(date)
     schedules.order(:day_of_week).map do |schedule|
@@ -56,9 +52,7 @@ class Service < ApplicationRecord
   end
 
   def used_hours_per_user(week, date)
-    unless DateUtils.valid_date?(date)
-      raise ArgumentError, 'La fecha no esta en formato correcto'
-    end
+    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
 
     date = Date.parse(date)
     schedules.order(:day_of_week).map do |schedule|

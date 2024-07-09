@@ -1,5 +1,3 @@
-
-
 class Availability < ApplicationRecord
   belongs_to :user
   validates :day_of_week, presence: true
