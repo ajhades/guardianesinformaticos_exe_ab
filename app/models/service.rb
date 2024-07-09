@@ -75,6 +75,20 @@ class Service < ApplicationRecord
     end
   end
 
+  def total_used_hours_per_user(week, date)
+    users.map do |user|
+      total_hours = user.used_hours_by_week(self, week, date)
+      {
+        user: {
+          name: user.full_name,
+          id: user.id
+        },
+        hours: total_hours,
+        total_hours: total_hours.count
+      }
+    end
+  end
+
   def available_days
     schedules.pluck(:day_of_week).uniq
     # days.map { |day| I18n.t("activerecord.attributes.schedule.day_of_week.#{day}") }

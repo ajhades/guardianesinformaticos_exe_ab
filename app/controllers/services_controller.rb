@@ -46,36 +46,36 @@ class ServicesController < ApplicationController
   def total_used_hours_per_user
     week = params[:week]
     date = params[:date]
-    users = @service.users
-    output = users.map do |user|
-      total_hours = user.used_hours_by_week(@service, week, date)
-      {
-        user: {
-          name: user.full_name,
-          id: user.id
-        },
-        hours: total_hours,
-        total_hours: total_hours.count
-      }
+    begin
+      output = @service.total_used_hours_per_user(week, date)
+      json_response(output)
+    rescue ArgumentError => e
+      json_response_error("Error: #{e.message}")
     end
-
-    json_response(output)
   end
 
   # Endpoint para crear esquema de horas utilizadas por cada dia de la semana
   def used_hours_per_user
     week = params[:week].to_i
     date = params[:date]
-    output = @service.used_hours_per_user(week, date)
-    json_response(output)
+    begin
+      output = @service.used_hours_per_user(week, date)
+      json_response(output)
+    rescue ArgumentError => e
+      json_response_error("Error: #{e.message}")
+    end
   end
 
   # Endpoint para crear esquema de horas disponibles por cada dia de la semana
   def available_hours_per_user
     week = params[:week].to_i
     date = params[:date]
-    output = @service.available_hours_per_user(week, date)
-    json_response(output)
+    begin
+      output = @service.available_hours_per_user(week, date)
+      json_response(output)
+    rescue ArgumentError => e
+      json_response_error("Error: #{e.message}")
+    end
   end
 
   # Horas disponibles por cada dia de la semana
@@ -99,8 +99,8 @@ class ServicesController < ApplicationController
       week = DateUtils.week_formatted(date)
       output = { week: week, dates: week_range }
       json_response(output)
-    rescue ArgumentError
-      json_response_error('Formato de fecha incorrecta')
+    rescue ArgumentError => e
+      json_response_error("Error: #{e.message}")
     end
   end
 
