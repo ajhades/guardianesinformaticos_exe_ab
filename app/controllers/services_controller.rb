@@ -32,6 +32,7 @@ class ServicesController < ApplicationController
     end
   end
 
+  # Endpoint para programar la semana
   def schedule_week
     service = Service.find(paras[:id])
 
@@ -41,6 +42,7 @@ class ServicesController < ApplicationController
     json_response('Programado')
   end
 
+  # Endpoint listar el total de horas utilizadas por cada usuario
   def total_used_hours_per_user
     week = params[:week]
     date = params[:date]
@@ -60,6 +62,7 @@ class ServicesController < ApplicationController
     json_response(output)
   end
 
+  # Endpoint para crear esquema de horas utilizadas por cada dia de la semana
   def used_hours_per_user
     week = params[:week].to_i
     date = params[:date]
@@ -67,6 +70,7 @@ class ServicesController < ApplicationController
     json_response(output)
   end
 
+  # Endpoint para crear esquema de horas disponibles por cada dia de la semana
   def available_hours_per_user
     week = params[:week].to_i
     date = params[:date]
@@ -74,9 +78,27 @@ class ServicesController < ApplicationController
     json_response(output)
   end
 
+  # Horas disponibles por cada dia de la semana
   def availabilities_hours
     output = @service.availabilities_hours
     json_response(output)
+  end
+
+  # Fechas para la semana seleccionada
+  def week_selected
+    date = params[:date]
+
+    begin
+      week_range = DateUtils.get_week_range(date)
+      week = DateUtils.week_formatted(date)
+      output = {
+        week: week,
+        dates: week_range
+      }
+      json_response(output)
+      rescue ArgumentError
+        json_response_error('Formato de fecha incorrecta')
+    end
   end
 
   private
