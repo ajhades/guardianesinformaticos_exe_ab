@@ -3,7 +3,7 @@ module DateUtils
         Date.today.cweek
     end
 
-    def self.get_week_days(week, year, default=true)
+    def self.get_week_days(week, year, default = true)
         raise ArgumentError, 'Week number must be between 1 and 53' unless (1..53).include?(week)
         raise ArgumentError, 'The year must be a positive number' unless year > 0
         start_date = Date.commercial(year.to_i, week.to_i).beginning_of_week 
@@ -20,7 +20,12 @@ module DateUtils
     def self.week_formatted(week, year)
         raise ArgumentError, 'Week number must be between 1 and 53' unless (1..53).include?(week)
         raise ArgumentError, 'The year must be a positive number' unless year > 0
-        I18n.l(Date.commercial(year.to_i, week.to_i), format: :weekly)
+        I18n.l(Date.commercial(year, week), format: :weekly)
+    end
+
+    def self.day_formatted(date)
+        raise ArgumentError, 'Date: Incorrect format' unless valid_date?(date)
+        I18n.l(Date.parse(date), format: :long)
     end
     
     def self.get_week_range(date)
@@ -30,6 +35,13 @@ module DateUtils
         end_date = start_date + 6.days
       
         { start_date: I18n.l(start_date), end_date: I18n.l(end_date) }
+    end
+
+    def self.get_date_by_week(day, week, year)
+        raise ArgumentError, 'Week number must be between 1 and 53' unless (1..53).include?(week)
+        raise ArgumentError, 'The Day must be between 1 and 31' unless (1..31).include?(day)
+        raise ArgumentError, 'The year must be a positive number' unless year > 0
+        I18n.l(Date.commercial(year, week, day))
     end
 
     def self.valid_date?(string)

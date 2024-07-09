@@ -13,6 +13,10 @@ class Schedule < ApplicationRecord
     TimeRangeFormatter.convert_to_hour_array(start_time, end_time)
   end
 
+  def day_of_week_number
+    Schedule.day_of_weeks[day_of_week]
+  end
+
   def free_hours(_week, date)
     total_hours = available_hours
     daily_shifts = DailyShift.where(schedule: self, date:)
