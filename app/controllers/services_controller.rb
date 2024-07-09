@@ -91,13 +91,10 @@ class ServicesController < ApplicationController
     begin
       week_range = DateUtils.get_week_range(date)
       week = DateUtils.week_formatted(date)
-      output = {
-        week: week,
-        dates: week_range
-      }
+      output = { week: week, dates: week_range }
       json_response(output)
-      rescue ArgumentError
-        json_response_error('Formato de fecha incorrecta')
+    rescue ArgumentError
+      json_response_error('Formato de fecha incorrecta')
     end
   end
 

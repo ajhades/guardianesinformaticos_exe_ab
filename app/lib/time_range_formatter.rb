@@ -18,6 +18,7 @@ module TimeRangeFormatter
 
     hours
   end
+
   # Ordena de menor a mayor las horas ingresadas
   # Y las agrupa en sub arreglos por continuidad 
   # El formato de salida es "%H:%00"

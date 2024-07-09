@@ -2,6 +2,7 @@ module DateUtils
     def self.current_week_number
         Date.today.cweek
     end
+
     # Dias de la semana
     # @param week [Integer]
     # @param year [Integer]
@@ -20,6 +21,7 @@ module DateUtils
       
         week_days
     end
+
     # Semana en formato "Semana %V del %Y"
     # @param date [String] - formato "%Y-%m-%d"
     # @return [Date] - Semana en formato semanal
@@ -27,6 +29,7 @@ module DateUtils
         raise ArgumentError, 'Date: Incorrect format' unless valid_date?(date)
         I18n.l(Date.parse(date), format: :weekly)
     end
+
     # Semana en formato "%e de %B de %Y"
     # @param date [String] - formato "%Y-%m-%d"
     # @return [Date] - Fecha en formato extendido
@@ -34,6 +37,7 @@ module DateUtils
         raise ArgumentError, 'Date: Incorrect format' unless valid_date?(date)
         I18n.l(Date.parse(date), format: :long)
     end
+
     # Dia inicial y final de la semana en formato "%d/%m/%Y"
     # @param date [String] - formato "%Y-%m-%d"
     # @return [Object] - { start_date, end_date }
@@ -45,6 +49,7 @@ module DateUtils
       
         { start_date: I18n.l(start_date, format: :alternative), end_date: I18n.l(end_date, format: :alternative) }
     end
+
     # Fecha exacta segun el dia, semana y año
     # @param day [Integer] - Entre 1-31
     # @param week [Integer] - Entre 1-53
@@ -56,6 +61,7 @@ module DateUtils
         raise ArgumentError, 'The year must be a positive number' unless year > 0
         I18n.l(Date.commercial(year, week, day))
     end
+
     # Valida el formato de la fecha 
     # @param date [String] - Fecha a validar
     # @return [Boolean]
