@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class Availability < ApplicationRecord
   belongs_to :user
@@ -8,15 +8,7 @@ class Availability < ApplicationRecord
   validates :time, presence: true
   validates :user_id, presence: true
   validate :unique_availability
-  enum day_of_week: {
-    'L' => 1,
-    'M' => 2,
-    'X' => 3,
-    'J' => 4,
-    'V' => 5,
-    'S' => 6,
-    'D' => 7
-  }
+  enum day_of_week: { 'L' => 1, 'M' => 2, 'X' => 3, 'J' => 4, 'V' => 5, 'S' => 6, 'D' => 7 }
 
   private
 

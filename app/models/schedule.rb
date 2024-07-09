@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class Schedule < ApplicationRecord
   has_many :daily_shifts
@@ -8,15 +8,7 @@ class Schedule < ApplicationRecord
   validates :end_time, presence: true
   validates :service_id, presence: true
   validate :start_time_before_end_time
-  enum day_of_week: {
-    'L' => 1,
-    'M' => 2,
-    'X' => 3,
-    'J' => 4,
-    'V' => 5,
-    'S' => 6,
-    'D' => 7
-  }
+  enum day_of_week: { 'L' => 1, 'M' => 2, 'X' => 3, 'J' => 4, 'V' => 5, 'S' => 6, 'D' => 7 }
   def available_hours
     TimeRangeFormatter.convert_to_hour_array(start_time, end_time)
   end
@@ -39,14 +31,8 @@ class Schedule < ApplicationRecord
   def define_day(user_id, _schedule, week, date)
     _schedule.map do |value|
       ActiveRecord::Base.transaction do
-        day = DailyShift.create!(
-          schedule: self,
-          week:,
-          date:,
-          start_time: value.first,
-          end_time: value.last,
-          user_id:
-        )
+        day = DailyShift.create!(schedule: self, week:, date:,
+                                 start_time: value.first, end_time: value.last, user_id:)
         day.last_modification = Time.now
         day.save
       rescue ActiveRecord::RecordInvalid

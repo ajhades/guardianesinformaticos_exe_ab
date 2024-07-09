@@ -33,3 +33,4 @@
 /config/master.key
 
 /.byebug*
+.rubocop_todo.yml

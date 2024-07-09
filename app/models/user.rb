@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
   has_many :user_services
@@ -12,9 +10,8 @@ class User < ApplicationRecord
   validates :email, presence: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: self
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable,
+         :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
   # scope :availabilities_hours, ->(day_of_week, week) { where("LENGTH(title) > ?", length) }
 
@@ -23,21 +20,25 @@ class User < ApplicationRecord
   end
 
   def daily_availability(schedule, week, date)
-    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
+    unless DateUtils.valid_date?(date)
+      raise ArgumentError, 'La fecha no esta en formato correcto'
+    end
 
     date = Date.parse(date)
-    availabilities.where(day_of_week: schedule.day_of_week, week:, date: date.beginning_of_day..date.end_of_day)
-                  .where('time >= ? and time <= ?', schedule.start_time, schedule.end_time)
-                  .pluck(:time).uniq
+    availabilities.where(day_of_week: schedule.day_of_week, week:, date: date.beginning_of_day..date.end_of_day).where(
+      'time >= ? and time <= ?', schedule.start_time, schedule.end_time
+    ).pluck(:time).uniq
   end
 
   def weekly_availability(week, date)
-    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
+    unless DateUtils.valid_date?(date)
+      raise ArgumentError, 'La fecha no esta en formato correcto'
+    end
 
     date = Date.parse(date)
-    availabilities_hours = Availability.where(user: self, week:)
-                                       .where('extract(year  from date) = ?', date.year)
-                                       .pluck(:time)
+    availabilities_hours = Availability.where(user: self, week:).where(
+      'extract(year  from date) = ?', date.year
+    ).pluck(:time)
     availabilities_hours.sort!
   end
 
@@ -50,7 +51,9 @@ class User < ApplicationRecord
 
     daily_shifts.map do |daily_shift|
       # Rango de horas ocupado
-      range_hour_daily = TimeRangeFormatter.convert_to_hour_array(daily_shift.start_time, daily_shift.end_time)
+      range_hour_daily = TimeRangeFormatter.convert_to_hour_array(
+        daily_shift.start_time, daily_shift.end_time
+      )
       total_daily_hours -= range_hour_daily
     end
     # Total de horas libres
@@ -65,23 +68,30 @@ class User < ApplicationRecord
 
     daily_shifts.map do |daily_shift|
       # Rango de horas ocupado
-      total_daily_hours << TimeRangeFormatter.convert_to_hour_array(daily_shift.start_time, daily_shift.end_time)
+      total_daily_hours << TimeRangeFormatter.convert_to_hour_array(
+        daily_shift.start_time, daily_shift.end_time
+      )
     end
     total_daily_hours.flatten
   end
 
   def used_hours_by_week(service, week, date)
-    raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
+    unless DateUtils.valid_date?(date)
+      raise ArgumentError, 'Date: Incorrect format'
+    end
 
     date = Date.parse(date)
     total_hours = []
-    daily_shifts = DailyShift.where(week:, user: self, schedule: service.schedules.pluck(:id))
-                             .where('extract(year  from date) = ?', date.year)
+    daily_shifts = DailyShift.where(week:, user: self, schedule: service.schedules.pluck(:id)).where(
+      'extract(year  from date) = ?', date.year
+    )
 
     return total_hours if daily_shifts.blank?
 
     daily_shifts.map do |daily_shift|
-      total_hours << TimeRangeFormatter.convert_to_hour_array(daily_shift.start_time, daily_shift.end_time)
+      total_hours << TimeRangeFormatter.convert_to_hour_array(
+        daily_shift.start_time, daily_shift.end_time
+      )
     end
     total_hours.flatten.sort!
   end
