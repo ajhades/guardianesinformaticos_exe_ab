@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe SchedulesController, type: :controller do
-    let(:service) { create(:service) }
+  let(:user) { create(:user) }
+  let(:service) { create(:service) }
   let!(:schedule) { create(:schedule) }
   let(:valid_attributes) { { day_of_week: 'X', week: 26, start_time: "04:00", end_time: '14:00', service_id: service.id } }
   let(:invalid_attributes) { { day_of_week: '', week: '' } }
   let(:invalid_times) { { day_of_week: 'M', week: 26, start_time: "14:00", end_time: '04:00', service_id: service.id } }
+
+  before do
+    authenticate_user(user)
+  end
 
   describe "GET #index" do
     it "returns a success response" do

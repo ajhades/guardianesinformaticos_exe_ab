@@ -1,9 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ClientsController, type: :controller do
+  let(:user) { create(:user) }
   let!(:client) { create(:client) }
   let(:valid_attributes) { { name: 'John Doe', nit: '345123', status: "1" } }
   let(:invalid_attributes) { { name: '', nit: '' } }
+
+  before do
+    authenticate_user(user)
+  end
 
   describe "GET #index" do
     it "returns a success response" do

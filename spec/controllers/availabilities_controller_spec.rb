@@ -1,11 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe AvailabilitiesController, type: :controller do
-    let(:user) { create(:user) }
+  let(:user) { create(:user) }
   let!(:availability) { create(:availability, user: user) }
   let(:valid_attributes) { { day_of_week: 'X', week: 26, date: "2017-06-24 03:57:15.023", time: '04:00', user_id: user.id } }
   let(:invalid_attributes) { { day_of_week: '', week: '' } }
   let(:duplicate_availability){ {day_of_week: availability.day_of_week, time: availability.time, week: availability.week, date: availability.date}}
+
+  before do
+    authenticate_user(user)
+  end
 
   describe "GET #index" do
     it "returns a success response" do
