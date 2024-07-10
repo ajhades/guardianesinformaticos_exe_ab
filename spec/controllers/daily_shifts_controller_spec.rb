@@ -8,10 +8,10 @@ RSpec.describe DailyShiftsController, type: :controller do
   let(:invalid_attributes) { { date: '', week: '' } }
   let(:invalid_times) { { date: "2017-06-24 03:57:15.023", week: 26, start_time: "14:00", end_time: '04:00', user_id: user.id, schedule_id: schedule.id } }
 
-  before do
+  before(:each) do
     authenticate_user(user)
   end
-  
+
   describe "GET #index" do
     it "returns a success response" do
       get :index

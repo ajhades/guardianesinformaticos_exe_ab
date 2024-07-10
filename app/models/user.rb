@@ -13,7 +13,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
          :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
-
   def full_name
     "#{try(:first_name)} #{try(:last_name)}".to_s
   end
@@ -71,6 +70,7 @@ class User < ApplicationRecord
         daily_shift.start_time, daily_shift.end_time
       )
     end
+    # Total de horas ocupado
     total_daily_hours.flatten
   end
 

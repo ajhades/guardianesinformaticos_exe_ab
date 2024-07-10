@@ -8,7 +8,7 @@ RSpec.describe SchedulesController, type: :controller do
   let(:invalid_attributes) { { day_of_week: '', week: '' } }
   let(:invalid_times) { { day_of_week: 'M', week: 26, start_time: "14:00", end_time: '04:00', service_id: service.id } }
 
-  before do
+  before(:each) do
     authenticate_user(user)
   end
 

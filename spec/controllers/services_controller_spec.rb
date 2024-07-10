@@ -9,7 +9,7 @@ RSpec.describe ServicesController, type: :controller do
   let(:valid_date) { Date.today.to_s }
   let(:valid_week) { Date.today.cweek }
 
-  before do
+  before(:each) do
     authenticate_user(user)
   end
 
@@ -115,12 +115,13 @@ RSpec.describe ServicesController, type: :controller do
       expect(parsed_response).to have_key('errors')
     end
   end
+
   describe "GET #available_weeks" do
     it "returns available weeks for the service" do
       get :available_weeks, params: { id: service.id }
       expect(response).to be_successful
       expect(response.content_type).to eq('application/json; charset=utf-8')
-      
+
       parsed_response = JSON.parse(response.body)
       expect(parsed_response).to be_an(Array)
       expect(parsed_response.first).to include("date", "week", "label")
@@ -143,6 +144,7 @@ RSpec.describe ServicesController, type: :controller do
       expect(parsed_response['error']).to eq('Service not found')
     end
   end
+
   describe "GET #total_used_hours_per_user" do
     it "returns total hours per user for the service" do
       get :total_used_hours_per_user, params: { id: service.id, date: valid_date, week: valid_week }
@@ -152,10 +154,7 @@ RSpec.describe ServicesController, type: :controller do
       expect(parsed_response).to be_an(Array)
       parsed_response.each do |user_data|
         expect(user_data).to include(
-          "user" => a_hash_including(
-            "name" => be_a(String),
-            "id" => be_a(Integer)
-          ),
+          "user" => a_hash_including("name" => be_a(String), "id" => be_a(Integer)),
           "hours" => be_an_instance_of(Array),
           "total" => be_a(Integer)
         )
