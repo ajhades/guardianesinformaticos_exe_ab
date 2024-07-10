@@ -5,7 +5,7 @@ RSpec.describe ServicesController, type: :controller do
   let(:valid_attributes) { { name: 'John Doe', start_date: '2017-06-24 03:57:15.023', end_date: '2027-06-24 03:57:15.023', status: "1", client_id: create(:client).id } }
   let(:invalid_attributes) { { name: '', start_date: '', end_date: '' } }
   let(:valid_date) { Date.today.to_s }
-  let(:valid_week) { (1..53).to_s }
+  let(:valid_week) { Date.today.cweek }
 
   describe "GET #index" do
     it "returns a success response" do

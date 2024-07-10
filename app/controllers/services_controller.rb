@@ -1,5 +1,5 @@
 class ServicesController < ApplicationController
-  before_action :set_service, only: [:show, :update, :destroy, :total_used_hours_per_user, :availabilities_hours, :available_hours_per_user, :used_hours_per_user, :available_weeks]
+  before_action :set_service, only: [:show, :update, :destroy, :total_used_hours_per_user, :availabilities_hours, :available_hours_per_user, :used_hours_per_user, :available_weeks, :schedule_week]
   def index
     @services = Service.all
     json_response(@services)
@@ -34,14 +34,20 @@ class ServicesController < ApplicationController
 
   # Endpoint para programar la semana
   def schedule_week
-    return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("year")
-    service = Service.find(params[:id])
-    week = params[:week].to_i
-    year = params[:year].to_i
+    unless schedule_params.key?("week") && schedule_params.key?("date")
+      return json_response_error('Incomplete parameters', :bad_request)
+    end
+
+    week = schedule_params[:week].to_i
+    date = schedule_params[:date]
 
     begin
-      service.assign_weekly_schedule(week, year)
-      json_response({data: 'Programado'}, :no_content)
+      output = @service.assign_weekly_schedule(week, date)
+      if output.present?
+        json_response({ data: output, message: 'Scheduled', total: output.count }, :created)
+      else
+        json_response({ message: 'Nothing to schedule' })
+      end
     rescue ArgumentError => e
       json_response_error("Error: #{e.message}")
     end
@@ -50,6 +56,7 @@ class ServicesController < ApplicationController
   # Endpoint listar el total de horas utilizadas por cada usuario
   def total_used_hours_per_user
     return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("date")
+
     week = params[:week]
     date = params[:date]
     begin
@@ -63,6 +70,7 @@ class ServicesController < ApplicationController
   # Endpoint para crear esquema de horas utilizadas por cada dia de la semana
   def used_hours_per_user
     return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("date")
+
     week = params[:week].to_i
     date = params[:date]
     begin
@@ -76,6 +84,7 @@ class ServicesController < ApplicationController
   # Endpoint para crear esquema de horas disponibles por cada dia de la semana
   def available_hours_per_user
     return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("date")
+
     week = params[:week].to_i
     date = params[:date]
     begin
@@ -101,6 +110,7 @@ class ServicesController < ApplicationController
   # Fechas para la semana seleccionada
   def week_selected
     return json_response_error('Incomplete parameters', :bad_request) unless params.key?("date")
+
     date = params[:date]
 
     begin
@@ -122,6 +132,9 @@ class ServicesController < ApplicationController
   end
   def service_params
     params.require(:service).permit(:name, :start_date, :end_date, :status, :client_id)
+  end
+  def schedule_params
+    params.permit(:id, :week, :date)
   end
 
   def json_response(object, status = :ok)

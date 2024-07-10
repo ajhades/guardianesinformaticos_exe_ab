@@ -15,8 +15,8 @@ class Schedule < ApplicationRecord
     Schedule.day_of_weeks[day_of_week]
   end
 
-  def free_hours(_week, date)
-    total_hours = available_hours
+  def free_hours(_week, date, current_available_hours)
+    total_hours = current_available_hours
     daily_shifts = DailyShift.where(schedule: self, date:)
     daily_shifts.map do |daily|
       total_hours -= daily.used_hours
@@ -33,19 +33,16 @@ class Schedule < ApplicationRecord
   def define_day(user_id, _schedule, week, date)
     _schedule.map do |value|
       ActiveRecord::Base.transaction do
-        day = DailyShift.create!(schedule: self, week:, date:,
-                                 start_time: value.first, end_time: value.last, user_id:)
-        day.last_modification = Time.now
-        day.save
+        DailyShift.create!(schedule: self, week:, date:,
+                           start_time: value.first, end_time: value.last, user_id:)
       rescue ActiveRecord::RecordInvalid
         nil
       end
     end
   end
 
-  def free_users_hours_for_day(week, date)
+  def free_users_hours_for_day(week, date, free_hours_schedule)
     # Valida que hayan horas aun disponibles para esta tarea
-    free_hours_schedule = free_hours(week, date)
     return nil if free_hours_schedule.blank?
 
     users = service.users
@@ -64,12 +61,15 @@ class Schedule < ApplicationRecord
     temp_daily_shift
   end
 
-  def assign_users_by_day(week, year)
+  def assign_users_by_day(week, date)
+    year = Date.parse(date).year
     day_of_week = DateUtils.get_week_days(week, year)
+    current_available_hours = available_hours
     day_of_week.map do |day|
-      next if free_hours(week, day).blank?
+      current_free_hours = free_hours(week, day, current_available_hours)
+      next if current_free_hours.blank?
 
-      users_to_schedule = free_users_hours_for_day(week, day)
+      users_to_schedule = free_users_hours_for_day(week, day, current_free_hours)
       next if users_to_schedule.blank?
 
       user_to_schedule = select_best_range(users_to_schedule)

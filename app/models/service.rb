@@ -8,10 +8,13 @@ class Service < ApplicationRecord
   validates :end_date, presence: true
   validates :client_id, presence: true
 
-  def assign_weekly_schedule(week, year)
-    schedules.map do |schedule|
-      schedule.assign_users_by_day(week, year)
+  def assign_weekly_schedule(week, date)
+    raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
+
+    assigned = schedules.map do |schedule|
+      schedule.assign_users_by_day(week, date)
     end
+    assigned.flatten.compact
   end
 
   def assigned_user
@@ -77,6 +80,7 @@ class Service < ApplicationRecord
 
   def total_used_hours_per_user(week, date)
     raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
+
     users.map do |user|
       total_hours = user.used_hours_by_week(self, week, date)
       {
@@ -104,7 +108,7 @@ class Service < ApplicationRecord
 
     current_date = first_week_date
     while current_date <= last_week_date
-      weeks << { date: I18n.l(current_date), week: current_date.cweek, label: I18n.l(current_date, format: :weekly)}
+      weeks << { date: I18n.l(current_date), week: current_date.cweek, label: I18n.l(current_date, format: :weekly) }
       current_date += 1.week
     end
 
