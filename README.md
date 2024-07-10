@@ -29,7 +29,7 @@ A continuación se listan las rutas para el inicio y cierre de session.
 *El token de autorización es necesario para la mayoria de rutas del API*
 #### Iniciar sesión
 
-```http
+```
   POST /users/sign_in
 ```
 
@@ -49,7 +49,7 @@ _RESPONSE: success_
 
 #### Cerrar sesión
 
-```http
+```
   DELETE /users/sign_out
 ```
 | Header | Type     | Description                |
@@ -80,7 +80,7 @@ Los metodos a continuación perrmiten implementar la funcionalidad de:
 
 #### Agendar semana
 
-```http
+```
   GET /services/schedule_week/${id}?week=${week}&date=${date}
 ```
 
@@ -114,12 +114,12 @@ RESPONSE: success
     ],
     "message": "Scheduled",
     "total": 5
-]
+}
 ```
 
 #### Listar días de la semanas disponibles por tarea
 
-```http
+```
   GET /services/available_weeks/${id}
 ```
 
@@ -130,7 +130,7 @@ RESPONSE: success
 RESPONSE: success
 
 ```
-{
+[
     {
         "date": "2024-07-01",
         "week": 27,
@@ -142,7 +142,7 @@ RESPONSE: success
 
 #### Obtener día de inicio y fin de la semana seleccionada
 
-```http
+```
   GET /services/week_selected/?date=${date}
 ```
 
@@ -164,7 +164,7 @@ RESPONSE: success
 
 #### Listar las horas disponibles para cada usuario
 
-```http
+```
   GET /services/available_hours_per_user/${id}?week=${week}&date=${date}
 ```
 
@@ -212,7 +212,7 @@ RESPONSE: success
 
 #### Listar las horas implementadas para cada usuario
 
-```http
+```
   GET /services/used_hours_per_user/${id}?week=${week}&date=${date}
 ```
 
@@ -260,7 +260,7 @@ RESPONSE: success
 
 #### Listar el total de horas implementadas por cada usuario semanalmente
 
-```http
+```
   GET /services/total_used_hours_per_user/${id}?week=${week}&date=${date}
 ```
 
@@ -292,7 +292,7 @@ RESPONSE: success
 
 #### Listar el total de horas implementadas por cada usuario semanalmente
 
-```http
+```
   GET /services/availabilities_hours/${id}
 ```
 
@@ -393,6 +393,8 @@ En la raíz del proyecto debe ir el archivo .env con las siguientes variables.
 
 `JWT_KEY`
 
+
+## Diagrama modelo entidad relación
 
 ![Modelo entidad relacion](model_ER.svg)
 
