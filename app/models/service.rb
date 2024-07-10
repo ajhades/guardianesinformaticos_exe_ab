@@ -28,7 +28,7 @@ class Service < ApplicationRecord
   end
 
   def available_hours_per_user(week, date)
-    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
+    raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
 
     date = Date.parse(date)
     schedules.order(:day_of_week).map do |schedule|
@@ -52,7 +52,7 @@ class Service < ApplicationRecord
   end
 
   def used_hours_per_user(week, date)
-    raise ArgumentError, 'La fecha no esta en formato correcto' unless DateUtils.valid_date?(date)
+    raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
 
     date = Date.parse(date)
     schedules.order(:day_of_week).map do |schedule|
@@ -76,6 +76,7 @@ class Service < ApplicationRecord
   end
 
   def total_used_hours_per_user(week, date)
+    raise ArgumentError, 'Date: Incorrect format' unless DateUtils.valid_date?(date)
     users.map do |user|
       total_hours = user.used_hours_by_week(self, week, date)
       {

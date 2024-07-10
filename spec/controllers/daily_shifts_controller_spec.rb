@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe DailyShiftsController, type: :controller do
-    let(:user) { create(:user) }
-    let(:schedule) { create(:schedule) }
+  let(:user) { create(:user) }
+  let(:schedule) { create(:schedule) }
   let!(:daily_shift) { create(:daily_shift) }
   let(:valid_attributes) { { date: "2017-06-24 03:57:15.023", week: 26, start_time: "04:00", end_time: '14:00', user_id: user.id, schedule_id: schedule.id } }
   let(:invalid_attributes) { { date: '', week: '' } }
@@ -51,8 +51,10 @@ RSpec.describe DailyShiftsController, type: :controller do
       it "end_time before start_time for the new daily_shift" do
         post :create, params: { daily_shift: invalid_times }
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to include("must be before end time")
         expect(response.content_type).to eq('application/json; charset=utf-8')
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to have_key('errors')
+        expect(parsed_response['errors']).to include(/a|must be before end time/)
       end
     end
   end

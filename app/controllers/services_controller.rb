@@ -34,16 +34,22 @@ class ServicesController < ApplicationController
 
   # Endpoint para programar la semana
   def schedule_week
-    service = Service.find(paras[:id])
+    return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("year")
+    service = Service.find(params[:id])
+    week = params[:week].to_i
+    year = params[:year].to_i
 
-    json_response_error('Información incompleta', :bad_request) unless params.key?("week") || params.key?("year")
-
-    service.assign_weekly_schedule(params[:week], params[:year])
-    json_response('Programado')
+    begin
+      service.assign_weekly_schedule(week, year)
+      json_response({data: 'Programado'}, :no_content)
+    rescue ArgumentError => e
+      json_response_error("Error: #{e.message}")
+    end
   end
 
   # Endpoint listar el total de horas utilizadas por cada usuario
   def total_used_hours_per_user
+    return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("date")
     week = params[:week]
     date = params[:date]
     begin
@@ -56,6 +62,7 @@ class ServicesController < ApplicationController
 
   # Endpoint para crear esquema de horas utilizadas por cada dia de la semana
   def used_hours_per_user
+    return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("date")
     week = params[:week].to_i
     date = params[:date]
     begin
@@ -68,6 +75,7 @@ class ServicesController < ApplicationController
 
   # Endpoint para crear esquema de horas disponibles por cada dia de la semana
   def available_hours_per_user
+    return json_response_error('Incomplete parameters', :bad_request) unless params.key?("week") || params.key?("date")
     week = params[:week].to_i
     date = params[:date]
     begin
@@ -92,6 +100,7 @@ class ServicesController < ApplicationController
 
   # Fechas para la semana seleccionada
   def week_selected
+    return json_response_error('Incomplete parameters', :bad_request) unless params.key?("date")
     date = params[:date]
 
     begin
