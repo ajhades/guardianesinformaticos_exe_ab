@@ -23,7 +23,7 @@ client1 = Client.create(name: Faker::JapaneseMedia::CowboyBebop.character , nit:
     4.times do |i|
         user = User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, document: Faker::Number.number(digits: 10), role: 'Developer', status:'1', email: Faker::Internet.email, password: 'topsecret', password_confirmation: 'topsecret', client: client1)
         user.save!
-        60.times do |i|
+        100.times do |i|
             date = Faker::Date.between(from: 6.days.ago, to: Date.today)
             # user.availabilities.create(day_of_week: days.sample, time: generate_random_time, week: 1, date: rand(7.days).seconds.ago )
             user.availabilities.create(day_of_week: date.cwday, time: generate_random_time, week: date.cweek, date: date )
