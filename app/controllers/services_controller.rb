@@ -1,5 +1,6 @@
 class ServicesController < ApplicationController
   before_action :set_service, only: [:show, :update, :destroy, :total_used_hours_per_user, :availabilities_hours, :available_hours_per_user, :used_hours_per_user, :available_weeks, :schedule_week]
+  skip_before_action :authenticate_user!, only: [:week_selected, :available_weeks]
   def index
     @services = Service.all
     json_response(@services)
