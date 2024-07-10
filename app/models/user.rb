@@ -13,7 +13,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
          :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
-  # scope :availabilities_hours, ->(day_of_week, week) { where("LENGTH(title) > ?", length) }
 
   def full_name
     "#{try(:first_name)} #{try(:last_name)}".to_s
@@ -21,7 +20,7 @@ class User < ApplicationRecord
 
   def daily_availability(schedule, week, date)
     unless DateUtils.valid_date?(date)
-      raise ArgumentError, 'La fecha no esta en formato correcto'
+      raise ArgumentError, 'Date: Incorrect format'
     end
 
     date = Date.parse(date)
@@ -32,7 +31,7 @@ class User < ApplicationRecord
 
   def weekly_availability(week, date)
     unless DateUtils.valid_date?(date)
-      raise ArgumentError, 'La fecha no esta en formato correcto'
+      raise ArgumentError, 'Date: Incorrect format'
     end
 
     date = Date.parse(date)

@@ -96,7 +96,6 @@ class Service < ApplicationRecord
 
   def available_days
     schedules.pluck(:day_of_week).uniq
-    # days.map { |day| I18n.t("activerecord.attributes.schedule.day_of_week.#{day}") }
   end
 
   def available_weeks

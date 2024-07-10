@@ -15,9 +15,8 @@ class Schedule < ApplicationRecord
     Schedule.day_of_weeks[day_of_week]
   end
 
-  def free_hours(_week, date, current_available_hours)
+  def free_hours(daily_shifts, current_available_hours)
     total_hours = current_available_hours
-    daily_shifts = DailyShift.where(schedule: self, date:)
     daily_shifts.map do |daily|
       total_hours -= daily.used_hours
     end
@@ -56,6 +55,7 @@ class Schedule < ApplicationRecord
 
       free_hours_usr = free_hours_usr.intersection(free_hours_schedule)
       availabilities_hours = TimeRangeFormatter.order_hours(free_hours_usr)
+      next if availabilities_hours.blank?
       temp_daily_shift << { usr.id => availabilities_hours }
     end
     temp_daily_shift
@@ -65,18 +65,35 @@ class Schedule < ApplicationRecord
     year = Date.parse(date).year
     day_of_week = DateUtils.get_week_days(week, year)
     current_available_hours = available_hours
+
+    all_daily_shifts = DailyShift.where(schedule: self, date: day_of_week).group_by{ |shift| shift.date.strftime('%Y-%m-%d') }
+
     day_of_week.map do |day|
-      current_free_hours = free_hours(week, day, current_available_hours)
-      next if current_free_hours.blank?
 
-      users_to_schedule = free_users_hours_for_day(week, day, current_free_hours)
-      next if users_to_schedule.blank?
+      daily_shifts = all_daily_shifts[day] || []
 
-      user_to_schedule = select_best_range(users_to_schedule)
-      user_id = user_to_schedule.keys.first
-      user_to_schedule.values.flat_map do |hours|
-        define_day(user_id, hours, week, day)
-      end
+      ## TODO: si son dos usuarios con horas disponibles [{1=>[["06:00"], ["08:00"], ["10:00", "11:00", "12:00"]]}, {2=>[["07:00"]]}, {3=>[["09:00"]]}]
+      ## solo agenda 1, ajustar para que agende ambos si la disponibilidad lo permite 
+      
+      daily_shifts_saved = []
+      begin
+        current_free_hours = free_hours(daily_shifts, current_available_hours)
+        break if current_free_hours.blank?
+
+        users_to_schedule = free_users_hours_for_day(week, day, current_free_hours)
+        break if users_to_schedule.blank?
+
+        user_to_schedule = select_best_range(users_to_schedule)
+        user_id = user_to_schedule.keys.first
+        saved = user_to_schedule.values.flat_map do |hours|
+          define_day(user_id, hours, week, day)
+        end
+        if saved.present?
+          daily_shifts.push(*saved.compact)
+          daily_shifts_saved.push(*saved.compact)
+        end
+      end while saved.compact.present?
+      daily_shifts_saved
     end
   end
 
