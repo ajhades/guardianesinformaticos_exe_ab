@@ -5,7 +5,6 @@ class CreateDailyShifts < ActiveRecord::Migration[7.1]
       t.datetime :date
       t.string :start_time
       t.string :end_time
-      t.datetime :last_modification
 
       t.timestamps
     end
