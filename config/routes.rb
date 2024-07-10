@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    sessions: 'users/sessions/sessions'
+  }
+  resources :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -7,4 +11,19 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get "/services/week_selected", to: "services#week_selected"
+  get "/services/schedule_week/:id", to: "services#schedule_week"
+  get "/services/available_weeks/:id", to: "services#available_weeks"
+  get "/services/total_used_hours_per_user/:id", to: "services#total_used_hours_per_user"
+  get "/services/used_hours_per_user/:id", to: "services#used_hours_per_user"
+  get "/services/available_hours_per_user/:id", to: "services#available_hours_per_user"
+  get "/services/availabilities_hours/:id", to: "services#availabilities_hours"
+
+  resources :clients
+  resources :daily_shifts
+  resources :services
+  resources :availabilities
+  resources :schedules
+
+  
 end
