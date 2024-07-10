@@ -6,7 +6,7 @@ RSpec.describe ClientsController, type: :controller do
   let(:valid_attributes) { { name: 'John Doe', nit: '345123', status: "1" } }
   let(:invalid_attributes) { { name: '', nit: '' } }
 
-  before do
+  before(:each) do
     authenticate_user(user)
   end
 

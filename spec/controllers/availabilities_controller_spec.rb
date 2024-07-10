@@ -7,7 +7,7 @@ RSpec.describe AvailabilitiesController, type: :controller do
   let(:invalid_attributes) { { day_of_week: '', week: '' } }
   let(:duplicate_availability){ {day_of_week: availability.day_of_week, time: availability.time, week: availability.week, date: availability.date}}
 
-  before do
+  before(:each) do
     authenticate_user(user)
   end
 
