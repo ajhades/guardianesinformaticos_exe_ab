@@ -70,15 +70,15 @@ Los servicios dentro del aplicativo son las tareas que se asignan a cada usuario
 ### Metodos para la funcionalidad de agendar
 
 Los metodos a continuación perrmiten implementar la funcionalidad de:
-- agendar tareas a los usuarios
-- listar semanas disponibles por tarea 
-- obtener día de inicio y fin de la semana seleccionada
-- listar las horas disponibles para cada usuario, por tarea y semanas
-- listar las horas implementadas para cada usuario, por tarea y semanas
-- listar el total de horas implementadas por cada usuario semanalmente
-- listar las días y horas disponibles para cada tarea
+- [agendar tareas a los usuarios](#agendar-semana)
+- [listar semanas disponibles por tarea](#listar-dias) 
+- [obtener día de inicio y fin de la semana seleccionada](#inicio-fin-semana)
+- [listar las horas disponibles para cada usuario, por tarea y semanas](#horas-disponibles-usuario)
+- [listar las horas implementadas para cada usuario, por tarea y semanas](#horas-implementadas-usuario)
+- [listar el total de horas implementadas por cada usuario semanalmente](#horas-totales-usuario)
+- [listar las días y horas disponibles para cada tarea](#horas-disponibles-tarea)
 
-#### Agendar semana
+#### [Agendar semana](#agendar-semana)
 
 ```
   GET /services/schedule_week/${id}?week=${week}&date=${date}
@@ -117,7 +117,7 @@ RESPONSE: success
 }
 ```
 
-#### Listar días de la semanas disponibles por tarea
+#### [Listar días de la semanas disponibles por tarea](#listar-dias)
 
 ```
   GET /services/available_weeks/${id}
@@ -140,7 +140,7 @@ RESPONSE: success
 ]
 ```
 
-#### Obtener día de inicio y fin de la semana seleccionada
+#### [Obtener día de inicio y fin de la semana seleccionada](#inicio-fin-semana)
 
 ```
   GET /services/week_selected/?date=${date}
@@ -162,7 +162,7 @@ RESPONSE: success
 }
 ```
 
-#### Listar las horas disponibles para cada usuario
+#### [Listar las horas disponibles para cada usuario](#horas-disponibles-usuario)
 
 ```
   GET /services/available_hours_per_user/${id}?week=${week}&date=${date}
@@ -210,7 +210,7 @@ RESPONSE: success
 ]
 ```
 
-#### Listar las horas implementadas para cada usuario
+#### [Listar las horas implementadas para cada usuario](#horas-implementadas-usuario)
 
 ```
   GET /services/used_hours_per_user/${id}?week=${week}&date=${date}
@@ -258,7 +258,7 @@ RESPONSE: success
 ]
 ```
 
-#### Listar el total de horas implementadas por cada usuario semanalmente
+#### [Listar el total de horas implementadas por cada usuario semanalmente](#horas-totales-usuario)
 
 ```
   GET /services/total_used_hours_per_user/${id}?week=${week}&date=${date}
@@ -290,7 +290,7 @@ RESPONSE: success
 ]
 ```
 
-#### Listar el total de horas implementadas por cada usuario semanalmente
+#### [listar las días y horas disponibles para cada tarea](#horas-disponibles-tarea)
 
 ```
   GET /services/availabilities_hours/${id}
